@@ -29,6 +29,7 @@ export default {
   methods: {
     itemClick(index){
       this.currentIndex = index
+      this.$emit('tabClick',index) //子传父，传回出去home
     }
   }
 }
