@@ -2,7 +2,12 @@
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
 
-    <scroll class="content" ref="Scroll" :probeType="3" @scroll="contentClick">
+    <scroll class="content" 
+            ref="Scroll" 
+            :probeType="3"
+            @scroll="contentScroll"
+            :pull-up-load="true"
+            @pullingUp="loadMore">
       <home-swiper :banners="banners"/>
       <home-recommend-view :recommends="recommends" />
       <home-feature-view/>
@@ -94,12 +99,14 @@ export default {
       //要拿到组件对象scroll,用ref
       this.$refs.Scroll.scrollTo(0,0)//这是调用了组件对象中的scrollTo的方法
     },
-    contentClick(position) {
+    contentScroll(position) {//返回顶部按钮的显示和隐藏
       //判断position.y
       //console.log(position)
       this.isShow = (-position.y) > 1000
     },
-
+    loadMore() { //上拉下载更多
+      this.getHomeGoods(this.currentType)
+    },
     /**
      * 网络请求的相关方法
      */
@@ -115,12 +122,15 @@ export default {
         //this.result = res
       })
     },
-    getHomeGoods(type) {
+    getHomeGoods(type) { //加载数据
       const page = this.goods[type].page + 1
       getHomeGoods(type,page).then(res => {
         //console.log(res)
         this.goods[type].list.push(...res.data.list) //把请求的数据加进数组中
         this.goods[type].page += 1  //请求了数据，相应的页码也要加一
+
+        //数据加载完之后，要做一件事情
+        this.$refs.Scroll.finishPullUp() //这样才能保证可以加载多次数据
       })
     }
   }
