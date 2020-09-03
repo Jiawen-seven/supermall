@@ -44,14 +44,20 @@ export default {
   },
   methods: {
     /**
-     * 下面这两个方法都是为了封装起来，方便home那里直接调用，就可以不用一大串东西了。
+     * 下面这三个方法都是为了封装起来，方便home那里直接调用，就可以不用一大串东西了。
      * 如：“this.$refs.Scroll.scroll.finishPullUp()” 直接改为“this.$refs.Scroll.finishPullUp()”
+     * “this.scroll && ” 是用于先判断this.scroll有没有值，有值才进行后面的函数。
+     * 因为在refresh那里，图片数据传的太快，但scroll还没有值，导致无法使用refresh，从而报错。
      * */
     scrollTo(x,y,time=1000) { //这是一个自定义的函数，命名和scrollTo函数一样而已。es6语法中，可以这样(time=1000)来设置默认的参数值。
-      this.scroll.scrollTo(x,y,time) //这是scroll自带的scrollTo方法，该方法的前两个参数是代表位置x和y，第三个参数代表时间。
+      this.scroll && this.scroll.scrollTo(x,y,time) //这是scroll自带的scrollTo方法，该方法的前两个参数是代表位置x和y，第三个参数代表时间。
     },
     finishPullUp() {
-      this.scroll.finishPullUp()//这样才能保证可以加载多次数据
+      this.scroll && this.scroll.finishPullUp()//这样才能保证可以加载多次数据
+    },
+    refresh() {
+      console.log('-----')
+      this.scroll && this.scroll.refresh()//每次加载完一张图片就进行刷新
     }
   }
 }

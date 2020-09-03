@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item">
-    <img :src="goodsItem.show.img" alt="">
+    <img :src="goodsItem.show.img" alt="" @load="imageLoad"> <!--@load="imageLoad"用于监听每一张图片是否加载完成-->
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
       <span class="price">{{goodsItem.price}}</span>
@@ -18,6 +18,14 @@ export default {
       default() {
         return {}
       }
+    }
+  },
+  methods: {
+    imageLoad() {
+      //调用scroll的refresh刷新，但这里没法调用。
+      //使用事件总线的办法发射事件（详细可看笔记）
+      //但是$bus是空的，怎么给它加东西呢？ 原型，在main.js中加。
+      this.$bus.$emit('itemImageLoad')//home那边监听这个事件
     }
   }
 }

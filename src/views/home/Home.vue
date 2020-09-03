@@ -29,7 +29,6 @@ import HomeFeatureView from './childComps/HomeFeatureView'
 import NavBar from 'components/common/navbar/NavBar'
 import TabControl from 'components/content/tabControl/TabControl'
 import GoodList from 'components/content/goods/GoodList'
-import GoodListItem from 'components/content/goods/GoodListItem'
 import Scroll from 'components/common/scroll/Scroll'
 import BackTop from 'components/content/backTop/BackTop'
 
@@ -44,7 +43,6 @@ export default {
     NavBar,
     TabControl,
     GoodList,
-    GoodListItem,
     Scroll,
     BackTop
   },
@@ -77,6 +75,13 @@ export default {
     this.getHomeGoods('new')
     this.getHomeGoods('sell')
   },
+  mounted() {
+    const refresh = this.debounce(this.$refs.Scroll.refresh,200) //200ms
+    //监听图片加载完成的事件。（因为这个函数最好是一开始就写好，但不能放在created中，不然$refs.Scroll有可能没有值）
+    this.$bus.$on('itemImageLoad',() => {
+      refresh() //每200ms后，进行刷新
+    })
+  },
   methods: {
     /**
      * 事件监听的相关方法
@@ -106,6 +111,15 @@ export default {
     },
     loadMore() { //上拉下载更多
       this.getHomeGoods(this.currentType)
+    },
+    debounce(func,delay) { /**防抖函数,避免刷新频繁 */
+      let timer = null
+      return function(...args){//args代表可以传入多个参数，这里暂时没有参数，但不影响
+        if(timer) clearTimeout(timer)
+        timer = setTimeout(() => {
+          func.apply(this, args)
+        },delay)
+      }
     },
     /**
      * 网络请求的相关方法
