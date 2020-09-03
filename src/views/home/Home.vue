@@ -1,7 +1,8 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-    <scroll class="content">
+
+    <scroll class="content" ref="Scroll" :probeType="3" @scroll="contentClick">
       <home-swiper :banners="banners"/>
       <home-recommend-view :recommends="recommends" />
       <home-feature-view/>
@@ -10,6 +11,8 @@
       @tabClick="tabClick"/>
       <good-list :goods="showGoods" />
     </scroll>
+
+    <back-top @click.native="backClick" v-show="isShow"></back-top>
   </div>
 </template>
 
@@ -23,6 +26,7 @@ import TabControl from 'components/content/tabControl/TabControl'
 import GoodList from 'components/content/goods/GoodList'
 import GoodListItem from 'components/content/goods/GoodListItem'
 import Scroll from 'components/common/scroll/Scroll'
+import BackTop from 'components/content/backTop/BackTop'
 
 import { getHomeMultidata, getHomeGoods } from 'network/home'
 
@@ -36,7 +40,8 @@ export default {
     TabControl,
     GoodList,
     GoodListItem,
-    Scroll
+    Scroll,
+    BackTop
   },
   data(){
     return{
@@ -48,7 +53,8 @@ export default {
         'new': {page: 0, list: []},
         'sell': {page: 0, list: []}
       },
-      currentType: 'pop'
+      currentType: 'pop',
+      isShow: false
     }
   },
   computed:{
@@ -84,6 +90,16 @@ export default {
           break
       }
     },
+    backClick() { /**返回顶部组件的监听事件 */
+      //要拿到组件对象scroll,用ref
+      this.$refs.Scroll.scrollTo(0,0)//这是调用了组件对象中的scrollTo的方法
+    },
+    contentClick(position) {
+      //判断position.y
+      //console.log(position)
+      this.isShow = (-position.y) > 1000
+    },
+
     /**
      * 网络请求的相关方法
      */
@@ -113,7 +129,7 @@ export default {
 
 <style scoped>
   #home{
-    padding-top: 44px; 
+    
     height: 100vh; /**视口高度 */
     position: relative; /**相对定位 */
   }
@@ -135,7 +151,7 @@ export default {
     z-index: 9;
   }
 
-  .content{
+  .content{/**滚动区域必须设置高度的 */
     overflow: hidden;
 
     position: absolute; /**绝对定位 */
@@ -144,4 +160,11 @@ export default {
     left: 0;
     right: 0;
   }
+
+  /* .content{
+    height: calc(100%- 93px);
+    overflow: hidden;
+    margin-top: 44px;
+  } */
+
 </style>
