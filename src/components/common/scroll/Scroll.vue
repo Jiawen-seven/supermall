@@ -63,6 +63,9 @@ export default {
     refresh() {
       //console.log('-----')
       this.scroll && this.scroll.refresh()//每200ms就进行一次刷新。
+    },
+    getScrollY() {  //获取值，所以要return
+      return this.scroll ? this.scroll.y : 0 
     }
   }
 }

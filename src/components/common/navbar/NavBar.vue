@@ -18,7 +18,7 @@ export default {
     height: 44px;
     line-height: 44px;/*文字的高度，设置这个属性，文字也会居中*/
     text-align: center;
-    box-shadow: 0 -1px 1px rgba(100,100,100,.2);
+    box-shadow: 0 -1px 5px rgba(100,100,100,.2);
   }
   .left,.right{
     width: 60px;

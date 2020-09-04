@@ -1,5 +1,5 @@
 <template>
-  <div class="goods-item">
+  <div class="goods-item" @click="itemClick">
     <img :src="goodsItem.show.img" alt="" @load="imageLoad"> <!--@load="imageLoad"用于监听每一张图片是否加载完成-->
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
@@ -26,6 +26,9 @@ export default {
       //使用事件总线的办法发射事件（详细可看笔记）
       //但是$bus是空的，怎么给它加东西呢？ 原型，在main.js中加。
       this.$bus.$emit('itemImageLoad')//home那边监听这个事件
+    },
+    itemClick() {//商品详情页的点击
+      this.$router.push('/detail/' + this.goodsItem.iid) //跳转到详情页页面，动态路由的使用
     }
   }
 }

@@ -65,7 +65,8 @@ export default {
       currentType: 'pop', //点击的类型
       isShow: false,  //返回顶部的图标是否显示
       tabOffsetTop: 0, //用于保存TabControl的offsetTop值
-      isFixed: false //tabcontrol是否吸顶
+      isFixed: false, //tabcontrol是否吸顶
+      saveY: 0 //记录离开时的位置
     }
   },
   computed:{
@@ -90,6 +91,13 @@ export default {
     this.$bus.$on('itemImageLoad',() => {
       refresh() //每200ms后，进行刷新，不再是没加载完一张图片就刷新一次了，这样浏览器负担重。
     })
+  },
+  activated() { //进来时
+    this.$refs.Scroll.scrollTo(0, this.saveY, 0) //三个参数，第一个是x，第二个是y，第三个是时间，时间不需要就设置为0
+    this.$refs.Scroll.refresh()//最好刷新一下
+  },
+  deactivated() { //离开时
+    this.saveY = this.$refs.Scroll.getScrollY()
   },
   methods: {
     /**
