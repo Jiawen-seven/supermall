@@ -1,19 +1,24 @@
 <template>
   <div id="home">
     <nav-bar class="home-nav"><div slot="center">购物街</div></nav-bar>
-
+    <!--一个小技巧，滚动到某个位置时，让它代替下面那个tabcontrol-->
+    <tab-control :titles="['流行','新款','精选']" 
+                  @tabClick="tabClick"
+                  ref="tabControl1"
+                  class="tab-control"
+                  v-show="isFixed"/> 
     <scroll class="content" 
             ref="Scroll" 
             :probeType="3"
             @scroll="contentScroll"
             :pull-up-load="true"
             @pullingUp="loadMore">
-      <home-swiper :banners="banners"/>
+      <home-swiper :banners="banners" @swiperImageLoad="swiperImageLoad"/>
       <home-recommend-view :recommends="recommends" />
       <home-feature-view/>
-      <tab-control class="tab-control" 
-      :titles="['流行','新款','精选']"
-      @tabClick="tabClick"/>
+      <tab-control :titles="['流行','新款','精选']" 
+                  @tabClick="tabClick"
+                  ref="tabControl2"/>
       <good-list :goods="showGoods" />
     </scroll>
 
@@ -33,6 +38,7 @@ import Scroll from 'components/common/scroll/Scroll'
 import BackTop from 'components/content/backTop/BackTop'
 
 import { getHomeMultidata, getHomeGoods } from 'network/home'
+import {debounce} from 'common/utils'
 
 export default {
   name:'Home',
@@ -56,8 +62,10 @@ export default {
         'new': {page: 0, list: []},
         'sell': {page: 0, list: []}
       },
-      currentType: 'pop',
-      isShow: false
+      currentType: 'pop', //点击的类型
+      isShow: false,  //返回顶部的图标是否显示
+      tabOffsetTop: 0, //用于保存TabControl的offsetTop值
+      isFixed: false //tabcontrol是否吸顶
     }
   },
   computed:{
@@ -76,10 +84,11 @@ export default {
     this.getHomeGoods('sell')
   },
   mounted() {
-    const refresh = this.debounce(this.$refs.Scroll.refresh,200) //200ms
+    //1.图片加载完成的事件监听
+    const refresh = debounce(this.$refs.Scroll.refresh,200) //200ms
     //监听图片加载完成的事件。（因为这个函数最好是一开始就写好，但不能放在created中，不然$refs.Scroll有可能没有值）
     this.$bus.$on('itemImageLoad',() => {
-      refresh() //每200ms后，进行刷新
+      refresh() //每200ms后，进行刷新，不再是没加载完一张图片就刷新一次了，这样浏览器负担重。
     })
   },
   methods: {
@@ -99,28 +108,29 @@ export default {
           this.currentType = 'sell'
           break
       }
+      this.$refs.tabControl1.currentIndex = this.index
+      this.$refs.tabControl2.currentIndex = this.index
     },
     backClick() { /**返回顶部组件的监听事件 */
       //要拿到组件对象scroll,用ref
       this.$refs.Scroll.scrollTo(0,0)//这是调用了组件对象中的scrollTo的方法
     },
-    contentScroll(position) {//返回顶部按钮的显示和隐藏
-      //判断position.y
-      //console.log(position)
+    contentScroll(position) {//监听滚动
+      //1.判断BaclTop是否显示(position.y)
       this.isShow = (-position.y) > 1000
+
+      //2.决定tabcontrol是否吸顶(position:fixed)
+      this.isFixed = (-position.y) > this.tabOffsetTop
     },
     loadMore() { //上拉下载更多
+      //console.log("上拉加载更多")
       this.getHomeGoods(this.currentType)
     },
-    debounce(func,delay) { /**防抖函数,避免刷新频繁 */
-      let timer = null
-      return function(...args){//args代表可以传入多个参数，这里暂时没有参数，但不影响
-        if(timer) clearTimeout(timer)
-        timer = setTimeout(() => {
-          func.apply(this, args)
-        },delay)
-      }
+    swiperImageLoad() {//监听轮播图是否加载完成，来获取offsetTop的准确值
+      this.tabOffsetTop = this.$refs.tabControl2.$el.offsetTop
+      //console.log(this.tabOffsetTop)
     },
+
     /**
      * 网络请求的相关方法
      */
@@ -162,18 +172,19 @@ export default {
     background-color: var(--color-tint);
     color: white;
 
-    position: fixed;
+    /**原本要fixed是因为用了浏览器的原生滚动方法，
+    但现在使用了better-scroll，指定了滚动区域，就没有必要fixed了。 */
+    /* position: fixed;
     left: 0;
     right: 0;
     top: 0;
-    z-index: 9;
+    z-index: 9; */
   }
-
-  .tab-control{
-    position: sticky; /*当这个标签到顶部的时候不跟着移动，固定在顶部。 */
-    top: 44px;/*设置这个top的高度，跟这个标签一样高就可以了 */
+  
+  .tab-control{ /*tabcontrol的替身 */
+    position: relative; /**相对定位，让它保持在自己的位置上 */
     z-index: 9;
-  }
+  } 
 
   .content{/**滚动区域必须设置高度的 */
     overflow: hidden;
@@ -185,10 +196,11 @@ export default {
     right: 0;
   }
 
-  /* .content{
+  /* .content{  //滚动区域设置高度的第二种方法
     height: calc(100%- 93px);
     overflow: hidden;
     margin-top: 44px;
   } */
+
 
 </style>

@@ -23,12 +23,12 @@ export default {
   },
   data() {
     return{
-      currentIndex: 0
+      currentIndex: 0 //默认当前的值是“流行”
     }
   },
   methods: {
     itemClick(index){
-      this.currentIndex = index
+      this.currentIndex = index //把最新点击的赋值给currentIndex
       this.$emit('tabClick',index) //子传父，传回出去home
     }
   }

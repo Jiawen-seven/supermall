@@ -32,15 +32,20 @@ export default {
       click: true,
       probeType: this.probeType,
       pullUpLoad: this.pullUpLoad
-    }),
-    //2.监听滚动的位置
-    this.scroll.on('scroll',(position) => {
-      this.$emit('scroll',position)//这个位置信息在scroll页面是不需要用到的，传出去给home (子传父)
-    }),
-    //3.监听上拉下载更多
-    this.scroll.on('pullingUp',() => {
-      this.$emit('pullingUp')//同样是传出去给home 
     })
+    //2.监听滚动的位置
+    if (this.probeType == 2 || this.probeType == 3) {
+      this.scroll.on('scroll',(position) => {
+        this.$emit('scroll',position)//这个位置信息在scroll页面是不需要用到的，传出去给home (子传父)
+      })
+    }
+    //3.监听上拉下载更多
+    if (this.pullUpLoad) {
+      this.scroll.on('pullingUp',() => {
+        this.$emit('pullingUp')//同样是传出去给home,因为要在home中做事情
+      })
+    }
+    
   },
   methods: {
     /**
@@ -56,8 +61,8 @@ export default {
       this.scroll && this.scroll.finishPullUp()//这样才能保证可以加载多次数据
     },
     refresh() {
-      console.log('-----')
-      this.scroll && this.scroll.refresh()//每次加载完一张图片就进行刷新
+      //console.log('-----')
+      this.scroll && this.scroll.refresh()//每200ms就进行一次刷新。
     }
   }
 }
