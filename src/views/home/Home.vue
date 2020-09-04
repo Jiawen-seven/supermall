@@ -108,8 +108,9 @@ export default {
           this.currentType = 'sell'
           break
       }
-      this.$refs.tabControl1.currentIndex = this.index
-      this.$refs.tabControl2.currentIndex = this.index
+      //下面的index直接写，不用加个this，因为在函数里面。
+      this.$refs.tabControl1.currentIndex = index
+      this.$refs.tabControl2.currentIndex = index
     },
     backClick() { /**返回顶部组件的监听事件 */
       //要拿到组件对象scroll,用ref
