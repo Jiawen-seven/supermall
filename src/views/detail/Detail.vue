@@ -9,7 +9,7 @@
 <script>
 import DetailNavbar from './childComps/DetailNavbar'
 import DetailSwiper from './childComps/DetailSwiper'
-import DetailInfo from './childComps/DetailInfo'
+import DetailInfo from './childComps/DetailBaseInfo'
 
 import {getDetail, Goods} from 'network/detail'
 
