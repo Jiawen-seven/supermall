@@ -5,7 +5,7 @@
     <div class="info-price">
       <span class="n-price">{{goods.newPrice}}</span>
       <span class="o-price">{{goods.oldPrice}}</span>
-      <span v-if="goods.discount" class="discount">{{goods.discount}}</span>
+      <span v-if="goods.discount" class="discount" :style="{backgroundColor: goods.discountBgColor}">{{goods.discount}}</span>
     </div>
     <div class="info-other">
       <span>{{goods.columns[0]}}</span>
@@ -17,7 +17,7 @@
       <!--这个循环显示services数组的内容，除了最后一个（因为在上面已经显示过了）。
       这里因为v-for的是一个数字，所以从1到该数字，而不是从0开始的。因此有下面的[index-1]-->
       <span class="info-service-item" v-for="index in goods.services.length-1" :key="index">
-        <img :src="goods.services[index-1].icon">
+        <img :src="goods.services[1].icon"><!--原本是动态的，但是有些数据它第一个没有提供图标，图标其实都是一样的，所以这里就固定用第二个。-->
         <span>{{goods.services[index-1].name}}</span>
       </span>
     </div>
@@ -64,7 +64,8 @@ export default {
     font-size: 12px;
     padding: 2px 5px;
     color: #fff;
-    background-color: var(--color-high-text);
+    /* 把背景颜色调成动态，因为接口数据有给这个颜色 */
+    /* background-color: var(--color-high-text); */
     border-radius: 8px;
     margin-left: 5px;
 
@@ -92,7 +93,7 @@ export default {
     top: 2px;
   }
   .info-service-item span{
-    font-size: 13px;
+    font-size: 12px;
     color: #333;
   }
 </style>
