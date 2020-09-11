@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="itemClick">
-    <img :src="goodsItem.show.img" alt="" @load="imageLoad"> <!--@load="imageLoad"用于监听每一张图片是否加载完成-->
+    <img :src="showImage" alt="" @load="imageLoad"> <!--@load="imageLoad"用于监听每一张图片是否加载完成-->
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
       <span class="price">{{goodsItem.price}}</span>
@@ -20,12 +20,24 @@ export default {
       }
     }
   },
+  computed: {
+    showImage(){ 
+      //一个是详情页最底下的商品推荐数据，一个是首页商品展示的数据，
+      //它们图片的位置不一样，所以弄一个计算属性来设置两种情况。
+      return this.goodsItem.image || this.goodsItem.show.img
+    }
+  },
   methods: {
     imageLoad() {
       //调用scroll的refresh刷新，但这里没法调用。
       //使用事件总线的办法发射事件（详细可看笔记）
       //但是$bus是空的，怎么给它加东西呢？ 原型，在main.js中加。
-      this.$bus.$emit('itemImageLoad')//home那边监听这个事件
+      //因为详情页最下面也有商品推荐展示的数据，所以也要监听图片加载完成。
+      if(this.$route.path.indexOf('/home')){
+        this.$bus.$emit('homeItemImageLoad')//home那边监听这个事件
+      } else if (this.$route.path.indexOf('/detail')){
+        this.$bus.$emit('detailItemImageLoad')//detail那边监听这个事件
+      }
     },
     itemClick() {//商品详情页的点击
       this.$router.push('/detail/' + this.goodsItem.iid) //跳转到详情页页面，动态路由的使用

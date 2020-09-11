@@ -29,14 +29,14 @@ export default {
   mounted() {//template挂载到整个dom上会回调
     //1.创建BScroll对象
     this.scroll = new BScroll(this.$refs.wrapper,{
-      click: true,
-      probeType: this.probeType,
-      pullUpLoad: this.pullUpLoad
+      click: true, //其他监听事件的参数
+      probeType: this.probeType, //监听的参数
+      pullUpLoad: this.pullUpLoad  //上拉下载的参数
     })
     //2.监听滚动的位置
     if (this.probeType == 2 || this.probeType == 3) {
       this.scroll.on('scroll',(position) => {
-        this.$emit('scroll',position)//这个位置信息在scroll页面是不需要用到的，传出去给home (子传父)
+        this.$emit('scroll',position)//这个位置信息在scroll页面是不需要用到的，传出去给home (子传父)和Detail
       })
     }
     //3.监听上拉下载更多

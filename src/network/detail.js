@@ -7,6 +7,13 @@ export function getDetail(iid){
     }
   })
 }
+
+export function getRecommend() {
+  return request({
+    url: '/recommend'
+  })
+}
+
 export class Goods{ //将所有需要用到的数据封装到一个类里面
   constructor(itemInfo, columns, services){
     this.title = itemInfo.title

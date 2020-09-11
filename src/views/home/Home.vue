@@ -88,7 +88,7 @@ export default {
     //1.图片加载完成的事件监听
     const refresh = debounce(this.$refs.Scroll.refresh,200) //200ms
     //监听图片加载完成的事件。（因为这个函数最好是一开始就写好，但不能放在created中，不然$refs.Scroll有可能没有值）
-    this.$bus.$on('itemImageLoad',() => {
+    this.$bus.$on('homeItemImageLoad',() => {
       refresh() //每200ms后，进行刷新，不再是每加载完一张图片就刷新一次了，这样浏览器负担重。
     })
   },
@@ -116,6 +116,7 @@ export default {
           this.currentType = 'sell'
           break
       }
+      //让两个tabControl的currentIndex保持一致
       //下面的index直接写，不用加个this，因为在函数里面。
       this.$refs.tabControl1.currentIndex = index
       this.$refs.tabControl2.currentIndex = index

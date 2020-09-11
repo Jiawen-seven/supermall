@@ -37,7 +37,7 @@ export default {
       //判断所有的图片都加载完了，那么进行一次回调就可以了。
       //this.counter += 1  直接在if语句前面加++ 就可以简写这一句
       if(++this.counter === this.imagesLength){
-        this.$emit('imageLoad'); //等加载完，才发射事件，这样那个详情内容浏览的时候才不会卡顿。
+        this.$emit('imageLoad'); //等加载完，才发射事件。保证详情内容浏览的时候才不会卡顿。
       }
     }
   },
