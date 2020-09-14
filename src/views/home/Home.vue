@@ -93,11 +93,14 @@ export default {
     })
   },
   activated() { //进来时
+    this.$refs.Scroll.refresh()//最好刷新一下,为了能滚到对应位置(从详情页回到主页，不刷新会出现bug->直接滚到顶部，没有回到离开时的位置)
     this.$refs.Scroll.scrollTo(0, this.saveY, 0) //三个参数，第一个是x，第二个是y，第三个是时间，时间不需要就设置为0
-    this.$refs.Scroll.refresh()//最好刷新一下
+    this.$refs.Scroll.refresh()//最好刷新一下,为了在home中可以滚动(从别的页面回到主页面时，不刷新的话有时候主页面可能会滚动不了)
+    //console.log('come'+this.saveY)
   },
   deactivated() { //离开时
     this.saveY = this.$refs.Scroll.getScrollY()
+    //console.log('leave'+this.saveY)
   },
   methods: {
     /**

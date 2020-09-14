@@ -156,7 +156,7 @@ export default {
       product.iid = this.iid; //这个id必须传，判断商品的时候需要用。
 
       //2.将商品添加到购物车里
-      this.$store.commit('addCart',product)
+      this.$store.dispatch('addCart',product)
     }
   }
 }

@@ -33,7 +33,7 @@ export default {
       this.currentTitle = index
       this.$emit('titleClick',index)
     },
-    backClick() {
+    backClick() {/**返回主页 */
       this.$router.back()
     }
   }
