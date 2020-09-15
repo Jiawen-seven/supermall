@@ -5,9 +5,10 @@
       <div slot="center">购物车({{cartLength}})</div>
     </nav-bar>
     <!--购物车列表展示-->
-    <cart-list></cart-list>
-
+    <cart-list/>
     <!--底部工具栏-->
+    <cart-bottom-bar/>
+    
   </div>
 </template>
 
@@ -15,6 +16,7 @@
 import NavBar from 'components/common/navbar/NavBar'
 
 import cartList from './childComps/cartList'
+import cartBottomBar from './childComps/cartBottomBar'
 
 import { mapGetters } from 'vuex'
 
@@ -22,7 +24,8 @@ export default {
   name:'Shopcart',
   components: {
     NavBar,
-    cartList
+    cartList,
+    cartBottomBar
   },
   computed:{
     //方法一：如果很多vue都需要用到这个属性，这样写的话，代码长，而且重复的比较多。

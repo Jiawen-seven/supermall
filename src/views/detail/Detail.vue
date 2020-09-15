@@ -12,6 +12,7 @@
     </scroll>
     <detail-bottom-bar class="bottom-bar" @addCart="addToCart"/>
     <back-top @click.native="backClick" v-show="isShow"></back-top>
+    <!-- <toast :message="message" :show="show"/> 第一种普通封装toast的方式 -->
   </div>
 </template>
 
@@ -28,9 +29,12 @@ import DetailBottomBar from './childComps/DetailBottomBar'
 import Scroll from 'components/common/scroll/Scroll'
 import GoodList from 'components/content/goods/GoodList'
 import BackTop from 'components/content/backTop/BackTop'
+// import Toast from 'components/common/toast/Toast'
 
 import {getDetail, Goods, Shop, GoodsParam, getRecommend} from 'network/detail'
 import {debounce} from 'common/utils'
+
+import {mapActions} from 'vuex'
 
 export default {
   name:'Detail',
@@ -45,7 +49,8 @@ export default {
     DetailBottomBar,
     Scroll,
     GoodList,
-    BackTop
+    BackTop,
+    // Toast
   },
   data() {
     return {
@@ -61,6 +66,8 @@ export default {
       getThemeTopY: null,//存放图片加载完之后再重新赋值的offsetTop（防抖）
       currentTitle: 0,//记录当前标题
       isShow: false,//判断返回顶部按钮是否显示
+      // message: '',
+      // show: false
     }
   },
   created() {
@@ -121,6 +128,7 @@ export default {
     })
   },
   methods: {
+    ...mapActions(['addCart']),
     imageLoad() { //监听详情页商品详情图片是否加载完成（对应DetailGoodsInfo）
       this.$refs.scroll.refresh()//等图片加载完之后刷新，这里只刷新了一次，因为那边只发射了一次。
       this.getThemeTopY() //等图片加载完之后再重新赋值offsetTop，且使用了防抖函数，避免多次调用。
@@ -156,7 +164,27 @@ export default {
       product.iid = this.iid; //这个id必须传，判断商品的时候需要用。
 
       //2.将商品添加到购物车里
-      this.$store.dispatch('addCart',product)
+      // this.$store.dispatch('addCart',product).then(res => {
+      //   console.log(res)
+      // })
+      //商品添加到购物车的这一个步骤很多，如果在这里后面直接写弹出框是不对的。
+      //那怎么做呢？
+      //actions可以返回一个promise，这样在vuex中做了某个操作，可以通知外面已经完成这个操作。
+
+      //前面说过可以把getters映射到计算属性中，同样地，可以把actions映射到methods中。
+      this.addCart(product).then(res => {
+        //1.第一种普通封装toast的方式及使用
+        // this.message = res
+        // this.show = true
+
+        // setTimeout(() => {
+        //   this.show = false
+        //   this.message = ''
+        // },2000)
+
+        //第二种插件的封装方式及使用
+        this.$toast.show(res, 2000)
+      })
     }
   }
 }

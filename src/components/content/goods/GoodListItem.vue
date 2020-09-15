@@ -1,6 +1,6 @@
 <template>
   <div class="goods-item" @click="itemClick">
-    <img :src="showImage" alt="" @load="imageLoad"> <!--@load="imageLoad"用于监听每一张图片是否加载完成-->
+    <img v-lazy="showImage" alt="" @load="imageLoad"> <!--v-lazy="showImage"是使用了图片懒加载的方式 @load="imageLoad"用于监听每一张图片是否加载完成-->
     <div class="goods-info">
       <p>{{goodsItem.title}}</p>
       <span class="price">{{goodsItem.price}}</span>

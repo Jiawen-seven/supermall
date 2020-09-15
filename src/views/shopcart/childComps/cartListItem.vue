@@ -1,7 +1,7 @@
 <template>
   <div class="shop-item">
     <div class="item-selector">
-      <check-button :is-check="itemInfo.checked" @click.native="checkClick"/>
+      <check-button :is-check="itemInfo.checked" @click.native="checkClick"/><!--监听组件根元素的原生事件需要加native-->
     </div>
     <div class="item-img">
       <img :src="itemInfo.image" alt="">

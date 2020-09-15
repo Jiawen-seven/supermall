@@ -15,10 +15,10 @@ export default {
     payload.count += 1
   },
   [ADD_TO_CART](state,payload){
-    //把该商品加入购物车，并且数量为1
-    payload.count = 1
-    state.cartList.push(payload);
     //在该模型中，添加一个属性，用于是否选中该商品
     payload.checked = true
+    //把该商品加入购物车，并且数量为1
+    payload.count = 1
+    state.cartList.push(payload);//将商品添加进购物车，这一句要放最后。。
   }
 }
