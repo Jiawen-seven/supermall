@@ -189,7 +189,7 @@ export default {
         // },2000)
 
         //第二种插件的封装方式及使用
-        this.$toast.show(res, 2000)
+        this.$toast.show(res, 3000)
       })
     }
   }

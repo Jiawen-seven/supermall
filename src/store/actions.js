@@ -16,12 +16,12 @@ export default {
     if(oldProduct){//说明已经存在该商品
       //oldProduct.count += 1
       context.commit(ADD_COUNTER,oldProduct)
-      resolve('当前商品数量+1')
+      resolve('当前该商品的数量为 ' + oldProduct.count)
     } else{
       //payload.count = 1
       //context.state.cartList.push(payload);
       context.commit(ADD_TO_CART,payload)
-      resolve('添加新商品')
+      resolve('已为您添加到购物车~')
     }
     })
   }

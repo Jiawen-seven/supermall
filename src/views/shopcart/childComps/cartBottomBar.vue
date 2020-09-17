@@ -82,7 +82,7 @@ export default {
       // }
     },
     countClick(){
-      if(!this.isCheckedAll) { //存在没有选择的商品
+      if(this.sum == 0) { //如果没有选择的商品(则说明合计是0~)
         this.$toast.show('请选择购买的商品！',2000)
       }
     }
