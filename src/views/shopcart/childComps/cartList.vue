@@ -36,7 +36,7 @@ export default {
     height: calc(100% - 44px - 49px - 40px);
   }
   .content{/**滚动区域必须设置高度 */
-    overflow: hidden;
+    overflow: hidden; /**禁止浏览器的原生滚动 */
     height: 100%;
   }
 </style>

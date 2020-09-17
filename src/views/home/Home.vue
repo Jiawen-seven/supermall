@@ -176,7 +176,6 @@ export default {
 
 <style scoped>
   #home{
-    
     height: 100vh; /**视口高度 */
     position: relative; /**相对定位 */
   }
@@ -200,7 +199,7 @@ export default {
   } 
 
   .content{/**滚动区域必须设置高度的 */
-    overflow: hidden;
+    overflow: hidden; /**禁止页面滚动（浏览器的原生滚动） */
 
     position: absolute; /**绝对定位 */
     top: 44px;

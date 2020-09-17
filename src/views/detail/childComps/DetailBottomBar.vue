@@ -5,12 +5,12 @@
         <i class="icon service"></i>
         <span class="text">客服</span>
       </div>
-      <div>
+      <div @click="shopClick">
         <i class="icon shop"></i>
         <span class="text">店铺</span>
       </div>
-      <div>
-        <i class="icon select"></i>
+      <div @click="collectClick">
+        <i class="icon select" :class="{collect: isCollect}"></i>
         <span class="text">收藏</span>
       </div>
     </div>
@@ -24,9 +24,20 @@
 <script>
 export default {
   name:'DetailBottomBar',
+  data(){
+    return{
+      isCollect: false //是否收藏，默认是不收藏
+    }
+  },
   methods: {
     addToCart() {
       this.$emit('addCart');//商品信息需要在Detail中获取，所以发射事件到Detail中。
+    },
+    shopClick() {
+      this.$emit('shopClick');
+    },
+    collectClick() {
+      this.isCollect = !this.isCollect
     }
   }
 }
@@ -55,10 +66,16 @@ export default {
     background: url("~assets/img/detail/detail_bottom.png") 0 0/100%;
   }
   .bar-left .service{
-    background-position:0 -54px;
+    background-position:0 -53px;
   }
   .bar-left .shop{
     background-position: 0 -98px;
+  }
+  .bar-left .select{
+    background-position: 0 1px;
+  }
+  .bar-left .collect{
+    background-position: 0 -26px;
   }
   .bar-right{
     font-size: 15px;

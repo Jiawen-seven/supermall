@@ -40,7 +40,7 @@ export default {
       }
     },
     itemClick() {//商品详情页的点击
-      this.$router.push('/detail/' + this.goodsItem.iid) //跳转到详情页页面，动态路由的使用
+      this.$router.push('/detail/' + this.goodsItem.iid) //跳转到详情页页面，动态路由的使用,这里的iid是对应home传给detail的
       //query方法
       // this.$router.push({
       //   path: '/detail',

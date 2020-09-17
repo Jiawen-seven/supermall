@@ -1,16 +1,19 @@
 <template>
   <div id="detail">
     <detail-navbar class="detail-nav" @titleClick="titleClick" ref="navbar"></detail-navbar>
-    <scroll class="content" ref="scroll" :probeType="3" @scroll="titleScroll"> <!--用scroll的时候，必须要给一个固定的高度-->
+    <scroll class="content" 
+            ref="scroll" 
+            :probeType="3" 
+            @scroll="titleScroll"> <!--用scroll的时候，必须要给一个固定的高度-->
       <detail-swiper :top-image="topImage"/>
       <detail-base-info :goods="goods"/>
-      <detail-shop-info :shop="shop"/>
+      <detail-shop-info :shop="shop" ref="shop"/>
       <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad"/>
       <detail-param-info :param-info="paramInfo" ref="param"/>
-      <detail-comment-info :comment-info="commentInfo" ref="comment"/>
+      <detail-comment-info :comment-info="commentInfo" :iid="iid" ref="comment"/>
       <good-list :goods="recommends" ref="recommend"/>
     </scroll>
-    <detail-bottom-bar class="bottom-bar" @addCart="addToCart"/>
+    <detail-bottom-bar class="bottom-bar" @addCart="addToCart" @shopClick="shopClick"/>
     <back-top @click.native="backClick" v-show="isShow"></back-top>
     <!-- <toast :message="message" :show="show"/> 第一种普通封装toast的方式 -->
   </div>
@@ -154,6 +157,9 @@ export default {
       //要拿到组件对象scroll,用ref
       this.$refs.scroll.scrollTo(0,0)//这是调用了组件对象中的scrollTo的方法
     },
+    shopClick() {/**店铺的按钮事件 */
+      this.$refs.scroll.scrollTo(0,-this.$refs.shop.$el.offsetTop,200)
+    },
     addToCart() {/*加入购物车的按钮事件 */
       //1.获取购物车需要的信息
       const product = {} //创建一个对象来存放
@@ -203,7 +209,8 @@ export default {
     z-index: 9;
     background-color: #fff;
   }
-  .content{/*滚动区域内容 */
+  .content{/*滚动区域内容 */  
+    overflow: hidden; /**禁止页面滚动（浏览器的原生滚动） */
     height: calc(100% - 44px - 49px);
   }
   .bottom-bar{/*底部的工具栏 */
