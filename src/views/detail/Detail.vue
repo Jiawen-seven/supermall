@@ -11,7 +11,7 @@
       <detail-goods-info :detail-info="detailInfo" @imageLoad="imageLoad"/>
       <detail-param-info :param-info="paramInfo" ref="param"/>
       <detail-comment-info :comment-info="commentInfo" :iid="iid" ref="comment"/>
-      <good-list :goods="recommends" ref="recommend"/>
+      <detail-recommend-info :goods="recommends" ref="recommend"/>
     </scroll>
     <detail-bottom-bar class="bottom-bar" @addCart="addToCart" @shopClick="shopClick"/>
     <back-top @click.native="backClick" v-show="isShow"></back-top>
@@ -28,9 +28,9 @@ import DetailGoodsInfo from './childComps/DetailGoodsInfo'
 import DetailParamInfo from './childComps/DetailParamInfo'
 import DetailCommentInfo from './childComps/DetailCommentInfo'
 import DetailBottomBar from './childComps/DetailBottomBar'
+import DetailRecommendInfo from './childComps/DetailRecommendInfo'
 
 import Scroll from 'components/common/scroll/Scroll'
-import GoodList from 'components/content/goods/GoodList'
 import BackTop from 'components/content/backTop/BackTop'
 // import Toast from 'components/common/toast/Toast'
 
@@ -50,8 +50,8 @@ export default {
     DetailParamInfo,
     DetailCommentInfo,
     DetailBottomBar,
+    DetailRecommendInfo,
     Scroll,
-    GoodList,
     BackTop,
     // Toast
   },
@@ -167,7 +167,7 @@ export default {
       product.title = this.goods.title;
       product.desc = this.goods.desc;
       product.price = this.goods.realPrice;
-      product.iid = this.iid; //这个id必须传，判断商品的时候需要用。
+      product.iid = this.iid; //这个id必须传，判断商品的时候需要用。商品的唯一标识！
 
       //2.将商品添加到购物车里
       // this.$store.dispatch('addCart',product).then(res => {

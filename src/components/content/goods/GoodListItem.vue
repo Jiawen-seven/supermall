@@ -22,9 +22,9 @@ export default {
   },
   computed: {
     showImage(){ 
-      //一个是详情页最底下的商品推荐数据，一个是首页商品展示的数据，
+      //一个是分类数据中商品展示数据，一个是详情页最底下的商品推荐数据,一个是首页商品展示的数据 (前两个数据必须放在前面，只有首页的数据可以放最后，我也不知道为啥，否则其它两个无法显示)
       //它们图片的位置不一样，所以弄一个计算属性来设置两种情况。
-      return this.goodsItem.image || this.goodsItem.show.img
+      return this.goodsItem.img || this.goodsItem.image ||  this.goodsItem.show.img 
     }
   },
   methods: {

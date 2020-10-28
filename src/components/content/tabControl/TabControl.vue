@@ -53,11 +53,11 @@ export default {
     padding: 5px;
   }
 
-  .active{
+  .tab-control-item.active{  /* “ .tab-control .active ”  另一种写法，如果是同级两个类名不能分开，如果是上一级就要用空格分开*/
     color: var(--color-high-text);
 
   }
-  .active span{
+  .tab-control-item.active span{
     border-bottom: 3px solid var(--color-high-text);
 
   }
